@@ -57,7 +57,7 @@ app.post("/api/library", function (req, res) {
 app.get("/api/library/:id", function (req,res){
   db.Library.findAll({
     where:{
-      id: req.params.id
+      UserId: req.params.id
     }
   })
   .then(function(results){
