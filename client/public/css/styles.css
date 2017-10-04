@@ -69,3 +69,8 @@
 #chatName {
   box-shadow: none;
 }
+
+/*Discover*/
+.discover{
+  min-height:420px;
+}

@@ -36,10 +36,11 @@ class Discover extends Component {
 
     return (
       <div className="wrapper">
-        <div className="row">
-          <div className="col-sm-7 discover">
+        <div className="row ">
+          <div className="col-sm-2"></div>
+          <div className="col-sm-8">
             <div className="row personalInfo">
-              <div className="panel panel-primary" id="panelPrimary">
+              <div className="panel panel-primary discover" id="panelPrimary">
                 <div className="panel-heading" id="panel">
                   <h3 className="panel-title">Discover New Books</h3>
                 </div>
@@ -54,11 +55,13 @@ class Discover extends Component {
                       onChange={this.handleChange}
                       required
                     />
+                    <MuiThemeProvider>
                     <RaisedButton
                       label="Find a Book"
                       secondary={true}
                       onTouchTap={this.handleTouchTap}
                     />
+                    </MuiThemeProvider>
                     <DiscoverResults results={this.state.results}/>
                   </div>
                 </div>

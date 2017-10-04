@@ -8,10 +8,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import discoverHelpers from '../utils/libraryHelpers';
 
 class DiscoverResults extends Component {
-	render() {
-		return (
-			<div>
-      	{this.props.results.map(function(search,i){
+  render() {
+    return (
+      <div>
+        {this.props.results.map(function(search,i){
           return (
             <div key={i}>
                   <p className="bookTitle">{search.title}</p>
@@ -20,9 +20,9 @@ class DiscoverResults extends Component {
           )
         }.bind(this)
         )}
-			</div>
-		);
-	}
+      </div>
+    );
+  }
 };
 
 export default DiscoverResults;
