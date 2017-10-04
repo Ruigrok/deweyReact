@@ -23,8 +23,8 @@ app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 app.use(morgan('dev'));
 
 // Static directory
-//app.use(express.static(path.join(__dirname, 'client/build')));
-app.use(express.static("client/public"));
+//app.use(express.static("client/public"));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 
 // Get user user's groups and discussions
@@ -176,10 +176,14 @@ app.put("/api/groups/:group/discussions/:discussion", function(req, res){
   });
 });
 
-app.get('*', (req, res) => {
+/* app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/client/public/index.html'));
 });
+ */
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
 // -------------------------------------------------
 
 // Listener
