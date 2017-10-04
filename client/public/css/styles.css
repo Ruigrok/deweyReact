@@ -1,4 +1,27 @@
 /*Home Page*/
+.landingPage {
+  background-image: url("../img/landingPage.jpg");
+  background-size: cover;
+  height: 100vh;
+}
+.landing{
+  color:white;
+  font-family: 'Inconsolata', monospace;
+  margin: 0;
+  font-weight:bold;
+}
+.landing h1 {
+  padding-left:0px;
+  font-family: 'Inconsolata', monospace;
+}
+.landing h2 {
+  padding-left:0px;
+  margin-left:0px;
+  font-size:1.8em;
+  font-family: 'Inconsolata', monospace;
+  background: none;
+  font-weight: bold;
+}
 
 /*Styles for every page*/
 
