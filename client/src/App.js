@@ -3,11 +3,8 @@ import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
-
 import { Tabs, Tab } from 'material-ui/Tabs';
 import FontIcon from 'material-ui/FontIcon';
-import MapsPersonPin from 'material-ui/svg-icons/maps/person-pin';
-
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -20,7 +17,6 @@ const muiTheme = getMuiTheme({
 });
 
 const styles = {
-
   appBar: {
     flexWrap: 'wrap',
   },

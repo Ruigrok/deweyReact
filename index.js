@@ -1,12 +1,8 @@
 // Include Server Dependencies
 const express = require("express");
 const bodyParser = require("body-parser");
-//const passport = require("passport");
 const morgan = require("morgan");
 const path = require('path');
-/* var cookieParser = require('cookie-parser')
-var flash = require('connect-flash');
-var session = require('express-session'); */
 
 var db = require("./client/models");
 
@@ -26,20 +22,24 @@ app.use(morgan('dev'));
 //app.use(express.static("client/public"));
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-
-// Get user user's groups and discussions
-app.get("/api/groups/:user", function (req, res) {
+// Get a user based on their email. Create user if email not found.
+app.get('/api/users/:email', function (req, res) {
   db.User.findOne({
-    where: { email: req.params.user },
-  })
-    .then(function (user) {
-      user.getGroups({
-        include: [db.Discussion]
-      })
-        .then(function (groups) {
-          res.json(groups);
-        });
-    });
+    where: { email: req.params.email },
+    include: [db.Library]
+  }).then(function (user) {
+    console.log(user);
+    if (!user) {
+      var newUser = {
+        email: req.params.email,
+      };
+      db.User.create(newUser).then(function (result) {
+        res.json(result)
+      });
+    } else {
+      res.json(user);
+    }
+  });
 });
 
 app.post("/api/library", function (req, res) {
@@ -76,25 +76,6 @@ app.delete("/api/library/:id",function(req,res){
   });
 });
 
-// Get a user based on their email. Create user if email not found.
-app.get('/api/users/:email', function (req, res) {
-  db.User.findOne({
-    where: { email: req.params.email },
-    include: [db.Library]
-  }).then(function (user) {
-    console.log(user);
-    if (!user) {
-      var newUser = {
-        email: req.params.email,
-      };
-      db.User.create(newUser).then(function (result) {
-        res.json(result)
-      });
-    } else {
-      res.json(user);
-    }
-  });
-});
 
 app.put("/api/users/:id", function (req,res){;
   db.User.update(
@@ -112,10 +93,26 @@ app.put("/api/users/:id", function (req,res){;
   });
 });
 
-// Add a new group and associate the user to that group
+// Get user user's groups and discussions
+app.get("/api/groups/:email", function (req, res) {
+  db.User.findOne({
+    where: { email: req.params.email },
+  })
+    .then(function (user) {
+      user.getGroups({
+        include: [db.Discussion]
+      })
+        .then(function (groups) {
+          res.json(groups);
+        });
+    });
+});
+
+// Create a new group and associate the user to that group
 app.post("/api/groups", function (req, res) {
   db.Group.create({
-    name: req.body.name
+    name: req.body.name,
+    description: req.body.description
   })
     .then(function (group) {
       var groupID = group.id;
@@ -128,6 +125,26 @@ app.post("/api/groups", function (req, res) {
       res.json(group)
     })
 });
+
+// Remove a user from a group
+app.delete("/api/groups/:group/:user", function (req, res) {
+  db.User.findOne({
+    where: { email: req.params.user }
+  }).then(function(user) {
+    user.setGroups(req.body.group)
+  }).then(function(results) {
+    res.json(results);
+  })
+})
+
+// Delete a group for all users
+app.delete("/api/groups/:group", function (req, res) {
+  db.Group.destroy({
+    where: { id: req.params.group }
+  }).then(function(results) {
+    res.json(results);
+  })
+})
 
 // Create new discussion in database and associate it with a group
 app.post("/api/groups/:group/discussions", function (req, res) {
@@ -148,7 +165,7 @@ app.get("/api/groups/:group/discussions", function(req, res){
           res.json(discussions)
         })
     });
-})
+});
 
 // Delete discussion in database whenever a group member deletes it
 app.delete("/api/groups/:group/discussions/:discussion", function(req, res){
@@ -178,8 +195,7 @@ app.put("/api/groups/:group/discussions/:discussion", function(req, res){
 
 /* app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/client/public/index.html'));
-});
- */
+}); */
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));

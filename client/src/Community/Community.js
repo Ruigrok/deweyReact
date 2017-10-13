@@ -26,14 +26,13 @@ class Community extends React.Component {
       stepIndex: 0
     };
 
-    //this.getUser = this.getUser.bind(this);
     this.getGroups = this.getGroups.bind(this);
     this.createGroup = this.createGroup.bind(this);
     this.selectGroup = this.selectGroup.bind(this);
+    this.leaveGroup = this.leaveGroup.bind(this);
   }
 
   getGroups() {
-    //const { userProfile } = this.props.auth;
     groupHelpers.getGroups(this.state.email)
       .then((data) => {
         this.setState({ groups: data })
@@ -46,30 +45,44 @@ class Community extends React.Component {
     const { userProfile, getProfile } = this.props.auth;
     if (!userProfile) {
       getProfile((err, profile) => {
-        this.setState({ 
-          email: profile.email, 
+        this.setState({
+          email: profile.email,
           nickname: profile.nickname,
           picture: profile.picture
         }, self.getGroups);
-        
+
       });
     } else {
-      this.setState({ 
+      this.setState({
         email: userProfile.email,
         nickname: userProfile.nickname,
         picture: userProfile.picture
-       }, self.getGroups);
+      }, self.getGroups);
     }
   }
 
-  createGroup(groupName) {
-    //const { userProfile } = this.props.auth;
+  createGroup(groupName, groupDescription) {
     groupHelpers.createGroup(groupName, this.state.email)
       .then(() => {
-        this.getGroups()
+        this.getGroups();
       })
   }
 
+  leaveGroup = (groupId) => {
+    groupHelpers.leaveGroup(groupId, this.state.email)
+      .then(() => {
+        this.getGroups();
+      })
+  }
+
+  deleteGroup = (groupId) => {
+    groupHelpers.deleteGroup(groupId)
+      .then(() => {
+        this.getGroups();
+      })
+  }
+
+  // Select a group for discussions component
   selectGroup(group) {
     this.setState({
       selectedGroup: group,
@@ -97,7 +110,12 @@ class Community extends React.Component {
         return (
           <div>
             <CreateGroup createGroup={this.createGroup} />
-            <GroupCards groups={this.state.groups} selectGroup={this.selectGroup} />
+            <GroupCards
+              groups={this.state.groups}
+              selectGroup={this.selectGroup}
+              leaveGroup={this.leaveGroup}
+              deleteGroup={this.deleteGroup}
+            />
           </div>
         );
       case 1:

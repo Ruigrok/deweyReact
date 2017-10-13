@@ -14,15 +14,17 @@ class CreateGroup extends Component {
     };
   }
 
+  createGroup = () => {
+    this.props.createGroup(this.state.groupName, this.state.groupDescription)
+    this.handleRequestClose();
+  }
+
   handleRequestClose = () => {
     this.setState({ open: false });
-    this.props.createGroup(this.state.groupName)
   }
 
   handleTouchTap = () => {
-    this.setState({
-      open: true,
-    });
+    this.setState({ open: true });
   }
 
   handleChange = (event) => {
@@ -37,7 +39,7 @@ class CreateGroup extends Component {
       <FlatButton
         label="Create"
         primary={true}
-        onTouchTap={this.handleRequestClose}
+        onTouchTap={this.createGroup}
       />
     );
 
@@ -60,6 +62,14 @@ class CreateGroup extends Component {
                 id="groupName"
                 onChange={this.handleChange}
                 required
+              />
+              <input
+                value={this.state.description}
+                type="text"
+                className="form-control text-left"
+                placeholder="Group Description"
+                id="groupDescription"
+                onChange={this.handleChange}
               />
             </Dialog>
 
