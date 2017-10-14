@@ -8,11 +8,14 @@ import {
 } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
+//import HomeIcon from 'material-ui/svg-icons/action/home';
 
 import groupHelpers from '../utils/groupHelpers';
 
 import GroupCards from './GroupCards.js';
 import CreateGroup from './CreateGroup.js';
+import JoinGroup from './JoinGroup.js';
 import Discussion from './Discussion';
 
 
@@ -25,14 +28,9 @@ class Community extends React.Component {
       selectedGroup: "",
       stepIndex: 0
     };
-
-    this.getGroups = this.getGroups.bind(this);
-    this.createGroup = this.createGroup.bind(this);
-    this.selectGroup = this.selectGroup.bind(this);
-    this.leaveGroup = this.leaveGroup.bind(this);
   }
 
-  getGroups() {
+  getGroups = () => {
     groupHelpers.getGroups(this.state.email)
       .then((data) => {
         this.setState({ groups: data })
@@ -61,8 +59,8 @@ class Community extends React.Component {
     }
   }
 
-  createGroup(groupName, groupDescription) {
-    groupHelpers.createGroup(groupName, this.state.email)
+  createGroup = (groupName, groupDescription) => {
+    groupHelpers.createGroup(groupName, groupDescription, this.state.email)
       .then(() => {
         this.getGroups();
       })
@@ -82,8 +80,27 @@ class Community extends React.Component {
       })
   }
 
+  // Get all groups to display in JoinGroup component
+  getAllGroups = () => {
+    groupHelpers.getAllGroups()
+      .then((data) => {
+        this.setState({
+          allGroups: data,
+          stepIndex: 0.5
+        })
+      })
+  }
+
+  // Join a group
+  joinGroup = (groupId) => {
+    groupHelpers.joinGroup(groupId, this.state.email)
+      .then(() => {
+        this.getAllGroups();
+      })
+  }
+
   // Select a group for discussions component
-  selectGroup(group) {
+  selectGroup = (group) => {
     this.setState({
       selectedGroup: group,
       stepIndex: 1
@@ -109,12 +126,47 @@ class Community extends React.Component {
       case 0:
         return (
           <div>
-            <CreateGroup createGroup={this.createGroup} />
+            <div className="col s12">
+              <div className="col s4 offset-s4">
+                <CreateGroup createGroup={this.createGroup} />
+                <RaisedButton
+                  label="Join a Group"
+                  secondary={true}
+                  fullWidth={true}
+                  style={{ marginTop: 12 }}
+                  icon={<FontIcon className="material-icons">group_add</FontIcon>}
+                  onTouchTap={this.getAllGroups}
+                />
+              </div>
+            </div>
             <GroupCards
               groups={this.state.groups}
               selectGroup={this.selectGroup}
               leaveGroup={this.leaveGroup}
               deleteGroup={this.deleteGroup}
+            />
+          </div>
+        );
+      case 0.5:
+        return (
+          <div>
+            <div className="col s12">
+              <div className="col s4 offset-s4">
+                <RaisedButton
+                  label="Return to Your Groups"
+                  secondary={true}
+                  fullWidth={true}
+                  style={{ marginTop: 12 }}
+                  icon={<FontIcon className="material-icons">keyboard_backspace</FontIcon>}
+                  onTouchTap={() => this.setState({ stepIndex: 0 })}
+                />
+              </div>
+            </div>
+            <JoinGroup
+              joinGroup={this.joinGroup}
+              groups={this.state.groups}
+              allGroups={this.state.allGroups}
+              user={this.state.email}
             />
           </div>
         );
@@ -135,13 +187,15 @@ class Community extends React.Component {
     const { stepIndex } = this.state;
 
     let displayStepper;
-    if (stepIndex > 0) {
+    if (stepIndex > 0.5) {
       displayStepper = (
-        <div style={{ width: '100%', maxWidth: 700, margin: 'auto' }}>
+        <div style={{ width: '100%', maxWidth: 700, margin: 'auto', marginBottom: '30px' }}>
 
           <Stepper linear={false} activeStep={stepIndex}>
             <Step>
-              <StepButton onClick={() => this.setState({ stepIndex: 0 })}>
+              <StepButton 
+                /* icon={<HomeIcon />} */
+                onClick={() => this.setState({ stepIndex: 0 })}>
                 Back to your groups page
               </StepButton>
             </Step>
@@ -157,26 +211,11 @@ class Community extends React.Component {
             </Step>
           </Stepper>
 
-
-          <div style={{ marginTop: 12, marginBottom: 12 }}>
-            <FlatButton
-              label="Back"
-              disabled={stepIndex === 0}
-              onClick={this.handlePrev}
-              style={{ marginRight: 12 }}
-            />
-            <RaisedButton
-              label="Next"
-              disabled={stepIndex === 2}
-              primary={true}
-              onClick={this.handleNext}
-            />
-          </div>
         </div>
       );
     } else {
       displayStepper = (
-        <div style={{ minHeight: '60px' }}></div>
+        <div style={{ minHeight: '30px' }}></div>
       );
     }
 

@@ -71,15 +71,14 @@ class GroupCards extends Component {
     let display;
     if (!this.props.groups.data || this.props.groups.data.length === 0) {
       display = (
-        <div className="col s12">
-          <Card style={{ marginTop: '30px' }}>
+        <div className="col s4 offset-s4">
+          <Card style={{ marginTop: '30px', paddingRight:'20px'}}>
             <CardHeader title='Create or join groups to see them here' />
           </Card>
         </div>
       );
     } else {
       display = (
-        <div className="col s12">
           <div className="row">
             {this.props.groups.data.map((group, i) => {
 
@@ -89,6 +88,7 @@ class GroupCards extends Component {
                     <CardHeader
                       title={group.name}
                       titleStyle={{ fontSize: '22px' }}
+                      subtitle={group.description}
                     />
                     <CardActions>
                       <FlatButton
@@ -113,7 +113,6 @@ class GroupCards extends Component {
               );
             })}
           </div>
-        </div>
       );
     }
 
