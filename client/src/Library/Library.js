@@ -3,7 +3,6 @@ import userHelpers from '../utils/userHelpers';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import LibraryResults from './LibraryResults';
 import libraryHelpers from '../utils/libraryHelpers';
@@ -145,7 +144,7 @@ class Library extends Component {
                   <h3 className="panel-title">{this.state.nickname}</h3>
                 </div>
                 <div className="panel-body">
-                  <img src={this.state.photoRef} id="personalPicture" alt="picture"/>
+                  <img src={this.state.photoRef} id="personalPicture" alt="user"/>
                   <div id="personalInfo">
                     <p><strong>Favorite Book: </strong>{this.state.myFavorite}</p>
                     <p><strong>Currently Reading: </strong>{this.state.myCurrent}</p>

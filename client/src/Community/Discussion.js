@@ -1,7 +1,7 @@
 
 import React, {Component} from 'react';
 
-import discussionHelpers from '../utils/helpersDiscussion';
+import discussionHelpers from '../utils/discussionHelpers';
 
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -46,13 +46,6 @@ class Discussion extends Component {
 			openEdit: false,
 			openDelete: false
 		}
-		this.getDiscussions = this.getDiscussions.bind(this);
-		this.handleSubmitChat = this.handleSubmitChat.bind(this);
-		this.handleChange = this.handleChange.bind(this);
-		this.handleTabClick = this.handleTabClick.bind(this);
-		this.getData = this.getData.bind(this);
-		this.deleteDiscussion = this.deleteDiscussion.bind(this);
-		this.editDiscussionName = this.editDiscussionName.bind(this);
 	}
 
   handleChange = (event) => {
@@ -61,7 +54,7 @@ class Discussion extends Component {
     this.setState(newState);
   }
 
-  handleTabClick(tab) {
+  handleTabClick = (tab) => {
   	this.setState({ chatId: tab.props.value }, this.getData)
   }
 
@@ -93,14 +86,14 @@ class Discussion extends Component {
     this.setState({ openDelete: false });
   };
 
-	getDiscussions() {
+	getDiscussions = () => {
 		discussionHelpers.getDiscussionsOfGroup(this.props.group.id)
 			.then((ListOfDiscussions) => {
 				this.setState({ discList: ListOfDiscussions })
 			})
 	}
 
-	deleteDiscussion() {
+	deleteDiscussion = () => {
 		discussionHelpers.deleteDiscussion(this.props.group.id, this.state.chatId)
 			.then(() => {
 				const chatRef = firebase.database().ref().child('chat').child("chat"+this.state.chatId);
@@ -110,7 +103,7 @@ class Discussion extends Component {
 			})
 	}
 
-	editDiscussionName() {
+	editDiscussionName = () => {
 		discussionHelpers.updateDiscussionName(this.props.group.id, this.state.chatId, this.state.chatName)
 			.then(() => {
 				this.handleCloseEdit();
@@ -119,7 +112,7 @@ class Discussion extends Component {
 			})
 	}
 
-  getData() {
+  getData = () => {
 		const chatRef = firebase.database().ref().child('chat').child('chat'+this.state.chatId);
 		chatRef.orderByChild("time").on('value', snap => {
 			let firebaseMessages = snap.val();

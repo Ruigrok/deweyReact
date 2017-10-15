@@ -16,6 +16,7 @@ import groupHelpers from '../utils/groupHelpers';
 import GroupCards from './GroupCards.js';
 import CreateGroup from './CreateGroup.js';
 import JoinGroup from './JoinGroup.js';
+//import ShowMembers from './ShowMembers.js';
 import Discussion from './Discussion';
 
 
@@ -99,14 +100,23 @@ class Community extends React.Component {
       })
   }
 
-  // Select a group for discussions component
-  selectGroup = (group) => {
+  // Select a group for Discussion component
+  showDiscussions = (group) => {
     this.setState({
       selectedGroup: group,
       stepIndex: 1
     })
   }
 
+// Select a group for ShowMembers component
+/* showMembers = (group) => {
+  this.setState({
+    selectedGroup: group,
+    stepIndex: 2
+  })
+} */
+
+  // Functions for step feature
   handleNext = () => {
     const { stepIndex } = this.state;
     if (stepIndex < 2) {
@@ -141,7 +151,8 @@ class Community extends React.Component {
             </div>
             <GroupCards
               groups={this.state.groups}
-              selectGroup={this.selectGroup}
+              showDiscussions={this.showDiscussions}
+              showMembers={this.showMembers}
               leaveGroup={this.leaveGroup}
               deleteGroup={this.deleteGroup}
             />
@@ -176,7 +187,7 @@ class Community extends React.Component {
         );
       case 2:
         return (
-          <a>Show group members here :)</a>
+          "<ShowMembers group={this.state.selectedGroup} />"
         );
       default:
         return 'You\'re a long way from home sonny jim!';
@@ -193,7 +204,7 @@ class Community extends React.Component {
 
           <Stepper linear={false} activeStep={stepIndex}>
             <Step>
-              <StepButton 
+              <StepButton
                 /* icon={<HomeIcon />} */
                 onClick={() => this.setState({ stepIndex: 0 })}>
                 Back to your groups page

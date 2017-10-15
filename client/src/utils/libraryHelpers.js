@@ -1,9 +1,8 @@
 import axios from 'axios';
 
-
-
 const libraryHelpers = {
-	getBookImageTitle: function(title){
+
+	getBookImageTitle: (title) => {
 		const apiKey = "AIzaSyBUVyIW2d33WHzArLsdPx3X-X39qV-SZLY";
 		const queryURL= "https://www.googleapis.com/books/v1/volumes?q=intitle:"+ title +"&key=" + apiKey;
 		return axios.get(queryURL).then(function(response){
@@ -14,7 +13,8 @@ const libraryHelpers = {
 			return returnedDisplay;
 		});
 	},
-	saveBook: function(title, author, comments, link, user){
+
+	saveBook: (title, author, comments, link, user) => {
 		var newBook={
 			title: title,
 			author: author,
@@ -22,13 +22,14 @@ const libraryHelpers = {
 			link: link,
 			UserId: user
 		}
-		return axios.post("/api/library",newBook);
-
+		return axios.post("/api/library", newBook);
 	},
-	showBooks: function(id){
+
+	showBooks: (id) => {
 		return axios.get("/api/library/"+id);
 	},
-	modalInfo: function(title){
+
+	modalInfo: (title) => {
 		const apiKey = "AIzaSyBUVyIW2d33WHzArLsdPx3X-X39qV-SZLY";
 		const queryURL= "https://www.googleapis.com/books/v1/volumes?q=intitle:"+ title +"&key=" + apiKey;
 		return axios.get(queryURL).then(function(response){
@@ -43,10 +44,12 @@ const libraryHelpers = {
 			return returnedBook;
 		});
 	},
-	deleteBook: function(id){
+
+	deleteBook: (id) => {
 		return axios.delete("/api/library/"+id);
 	},
-	updateUserBooks: function(id, favorite, current){
+
+	updateUserBooks: (id, favorite, current) => {
 		var updateInfo={
 			favoriteBook: favorite,
 			currentlyReading: current
@@ -55,9 +58,11 @@ const libraryHelpers = {
 		console.log("ID: "+id);
 		return axios.put("/api/users/"+id, updateInfo);
 	},
-	getUserBooks: function(email){
+
+	getUserBooks: (email) => {
 		return axios.get("/api/users/"+email);
 	}
 }
 
 export default libraryHelpers;
+

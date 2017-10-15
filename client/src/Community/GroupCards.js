@@ -72,47 +72,50 @@ class GroupCards extends Component {
     if (!this.props.groups.data || this.props.groups.data.length === 0) {
       display = (
         <div className="col s4 offset-s4">
-          <Card style={{ marginTop: '30px', paddingRight:'20px'}}>
+          <Card style={{ marginTop: '30px', paddingRight: '20px' }}>
             <CardHeader title='Create or join groups to see them here' />
           </Card>
         </div>
       );
     } else {
       display = (
-          <div className="row">
-            {this.props.groups.data.map((group, i) => {
+        <div className="row">
+          {this.props.groups.data.map((group, i) => {
 
-              return (
-                <div className="col s4" key={i}>
-                  <Card style={{ marginTop: '30px' }}>
-                    <CardHeader
-                      title={group.name}
-                      titleStyle={{ fontSize: '22px' }}
-                      subtitle={group.description}
+            return (
+              <div className="col s4" key={i}>
+                <Card style={{ marginTop: '30px' }}>
+                  <CardHeader
+                    title={group.name}
+                    titleStyle={{ fontSize: '22px' }}
+                    subtitle={group.description}
+                  />
+                  <CardActions>
+                    <FlatButton
+                      label="Open Discussions"
+                      onClick={() => this.props.showDiscussions(group)}
                     />
-                    <CardActions>
-                      <FlatButton
-                        label="Open Discussions"
-                        onClick={() => this.props.selectGroup(group)}
-                      />
-                      <br />
-                      <FlatButton label="See Members" />
-                      <IconMenu
-                        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                        targetOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                        style={menuStyles}
-                      >
-                        <MenuItem primaryText="Delete Group" onTouchTap={() => this.handleDeleteOpen(group.id)} />
-                        <MenuItem primaryText="Leave Group" onTouchTap={() => this.leaveGroup(group.id)} />
-                        <MenuItem primaryText="Edit Group" onTouchTap={this.handleEditOpen} />
-                      </IconMenu>
-                    </CardActions>
-                  </Card>
-                </div>
-              );
-            })}
-          </div>
+                    <br />
+                    <FlatButton
+                      label="See Members"
+                      onClick={() => this.props.showMembers(group)}
+                    />
+                    <IconMenu
+                      iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+                      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                      targetOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                      style={menuStyles}
+                    >
+                      <MenuItem primaryText="Delete Group" onTouchTap={() => this.handleDeleteOpen(group.id)} />
+                      <MenuItem primaryText="Leave Group" onTouchTap={() => this.leaveGroup(group.id)} />
+                      <MenuItem primaryText="Edit Group" onTouchTap={this.handleEditOpen} />
+                    </IconMenu>
+                  </CardActions>
+                </Card>
+              </div>
+            );
+          })}
+        </div>
       );
     }
 

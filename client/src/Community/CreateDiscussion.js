@@ -1,8 +1,7 @@
-
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import helpers from '../utils/helpersDiscussion';
+import discussionHelpers from '../utils/discussionHelpers';
 
 const divStyle = {
     textAlign: "center"
@@ -14,13 +13,11 @@ class CreateDiscussion extends Component {
     this.state = {
         discName: ""
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleFormChange = this.handleFormChange.bind(this);
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
-    helpers.createDiscussion(this.props.groupId, this.state.discName)
+    discussionHelpers.createDiscussion(this.props.groupId, this.state.discName)
       .then(() => {
         this.props.getDiscussions();
         this.setState({ discName: "" });

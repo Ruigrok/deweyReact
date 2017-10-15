@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const discoverHelpers = {
-	findBooks: function(search){
+
+	findBooks: (search) => {
 		const apiKey = "AIzaSyBUVyIW2d33WHzArLsdPx3X-X39qV-SZLY";
 		const queryURL= "https://www.googleapis.com/books/v1/volumes?q=intitle:"+ search +"&key=" + apiKey;
 		return axios.get(queryURL).then(function(response){

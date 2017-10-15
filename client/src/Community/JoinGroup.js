@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Card, CardActions, CardHeader } from 'material-ui/Card';
+import { Card, CardHeader } from 'material-ui/Card';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import DoneIcon from 'material-ui/svg-icons/action/done';

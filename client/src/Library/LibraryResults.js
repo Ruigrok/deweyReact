@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import userHelpers from '../utils/userHelpers';
-import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import libraryHelpers from '../utils/libraryHelpers';
 
@@ -86,7 +83,7 @@ class LibraryResults extends Component {
                   onTouchTap={this.handleTouchTap}
                 >
                   <p className="bookTitle">{search.title}</p>
-                  <img className="bookImage" title={search.title} id={search.id} src={search.link}/>
+                  <img className="bookImage" title={search.title} id={search.id} src={search.link} alt={search.title}/>
                 </div>
               </div>
             </MuiThemeProvider>
