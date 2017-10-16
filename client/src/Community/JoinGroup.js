@@ -15,7 +15,7 @@ class JoinGroup extends Component {
       display = (
         <div className="col s4 offset-s4">
           <Card style={{ marginTop: '30px', paddingRight: '20px' }}>
-            <CardHeader title='Create or join groups to see them here' />
+            <CardHeader title='No groups to show. Create one!' />
           </Card>
         </div>
       );

@@ -9,7 +9,6 @@ import {
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
-//import HomeIcon from 'material-ui/svg-icons/action/home';
 
 import groupHelpers from '../utils/groupHelpers';
 
@@ -100,6 +99,10 @@ class Community extends React.Component {
       })
   }
 
+  returnToGroups = () => {
+    this.setState({ stepIndex: 0 }, this.getGroups)
+  }
+
   // Select a group for Discussion component
   showDiscussions = (group) => {
     this.setState({
@@ -152,7 +155,7 @@ class Community extends React.Component {
             <GroupCards
               groups={this.state.groups}
               showDiscussions={this.showDiscussions}
-              showMembers={this.showMembers}
+              /*showMembers={this.showMembers}*/
               leaveGroup={this.leaveGroup}
               deleteGroup={this.deleteGroup}
             />
@@ -169,7 +172,7 @@ class Community extends React.Component {
                   fullWidth={true}
                   style={{ marginTop: 12 }}
                   icon={<FontIcon className="material-icons">keyboard_backspace</FontIcon>}
-                  onTouchTap={() => this.setState({ stepIndex: 0 })}
+                  onTouchTap={() => this.returnToGroups()}
                 />
               </div>
             </div>
@@ -187,7 +190,8 @@ class Community extends React.Component {
         );
       case 2:
         return (
-          "<ShowMembers group={this.state.selectedGroup} />"
+          ""
+          /* <ShowMembers group={this.state.selectedGroup} /> */
         );
       default:
         return 'You\'re a long way from home sonny jim!';
@@ -233,9 +237,7 @@ class Community extends React.Component {
     return (
       <MuiThemeProvider>
         <div>
-
           {displayStepper}
-
           <div className="container">
             <div className="row">
               <div className="col 12">
