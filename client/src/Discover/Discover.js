@@ -7,28 +7,37 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import DiscoverResults from './DiscoverResults';
 import discoverHelpers from '../utils/discoverHelpers';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import ActionFavorite from 'material-ui/svg-icons/action/favorite';
+import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
 
 class Discover extends Component {
   constructor(props) {
     super(props);
     this.state = {
       search:"",
-      results: [],
+      results: []
     };
   }
 
   // Use state.email from Auth0 to get MySQL user or create new user. Store user in state.user
   handleTouchTap = () => {
-    discoverHelpers.findBooks(this.state.search).then(function(response){
-      console.log("SEARCH FOR BOOK!");
+    discoverHelpers.findBooks(this.state.search).then((response)=>{
+      console.log(response);
+      this.setState({
+        results:response
+      })
+      console.log("RESULTS: "+this.state.results);
     })
-
   }
 
   handleChange = (event) => {
     var newState = {};
     newState[event.target.id] = event.target.value;
     this.setState(newState);
+  }
+  chooseButton=(event)=>{
+    console.log("SELECTED: "+this.state.selected);
   }
 
   // Here we render the function
@@ -46,6 +55,24 @@ class Discover extends Component {
                 </div>
                 <div className="panel-body">
                   <div>
+                    <MuiThemeProvider>
+                      <div className="radioButtons">
+                      <RadioButtonGroup name="search" defaultSelected="Genre" className="buttons">
+                        <RadioButton
+                          value="author"
+                          label="Author"
+                          id="author"
+                          onChange={this.chooseButton}
+                        />
+                        <RadioButton
+                          value="genre"
+                          label="Genre"
+                          id="genre"
+                          onChange={this.chooseButton}
+                        />
+                      </RadioButtonGroup>
+                      </div>
+                    </MuiThemeProvider>
                     <input
                       value={this.state.search}
                       type="text"
@@ -56,13 +83,13 @@ class Discover extends Component {
                       required
                     />
                     <MuiThemeProvider>
-                    <RaisedButton
-                      label="Find a Book"
-                      secondary={true}
-                      onTouchTap={this.handleTouchTap}
-                    />
+                      <RaisedButton
+                        label="Find a Book"
+                        secondary={true}
+                        onTouchTap={this.handleTouchTap}
+                      />
                     </MuiThemeProvider>
-                    <DiscoverResults results={this.state.results}/>
+                    <div>{this.state.results}</div>
                   </div>
                 </div>
               </div>
