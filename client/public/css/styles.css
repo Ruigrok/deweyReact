@@ -97,3 +97,6 @@
 .discover{
   min-height:420px;
 }
+.buttons {
+    display: inline-flex;
+}

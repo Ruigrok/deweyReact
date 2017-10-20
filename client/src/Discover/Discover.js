@@ -16,7 +16,8 @@ class Discover extends Component {
     super(props);
     this.state = {
       search:"",
-      results: []
+      results: [],
+      selectedOption:""
     };
   }
 
@@ -27,7 +28,8 @@ class Discover extends Component {
       this.setState({
         results:response
       })
-      console.log("RESULTS: "+this.state.results);
+      // console.log("RESULTS: "+this.state.results);
+      console.log("SELECTED: "+this.selectedOption); 
     })
   }
 
@@ -36,8 +38,11 @@ class Discover extends Component {
     newState[event.target.id] = event.target.value;
     this.setState(newState);
   }
-  chooseButton=(event)=>{
-    console.log("SELECTED: "+this.state.selected);
+  handleOptionChange=(event)=>{
+    this.setState({
+      selectedOption:event.target.value
+    })
+   console.log("SELECTED: "+this.selectedOption); 
   }
 
   // Here we render the function
@@ -61,14 +66,12 @@ class Discover extends Component {
                         <RadioButton
                           value="author"
                           label="Author"
-                          id="author"
-                          onChange={this.chooseButton}
+                          onClick={this.handleOptionChange}
                         />
                         <RadioButton
                           value="genre"
                           label="Genre"
-                          id="genre"
-                          onChange={this.chooseButton}
+                          onClick={this.handleOptionChange}
                         />
                       </RadioButtonGroup>
                       </div>

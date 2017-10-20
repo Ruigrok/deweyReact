@@ -14,8 +14,7 @@ class DiscoverResults extends Component {
         {this.props.results.map(function(search,i){
           return (
             <div key={i}>
-                  <p className="bookTitle">{search.title}</p>
-                  <img className="bookImage" title={search.title} id={search.id} src={search.link}/>
+              <p className="bookTitle">{search}</p>
             </div>
           )
         }.bind(this)
