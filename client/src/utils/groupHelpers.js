@@ -12,9 +12,9 @@ const groupHelpers = {
 
   getAllGroups: () => {
     return axios.get('/api/allgroups')
-    .then((response) => {
-      return response;
-    })
+      .then((response) => {
+        return response;
+      })
   },
 
   createGroup: (groupName, groupDescription, user) => {
@@ -42,10 +42,18 @@ const groupHelpers = {
   },
 
   joinGroup: (groupId, user) => {
-    return axios.post('/api/groups/' + groupId + '/users/' + user) 
-    .then((response) => {
-      return response;
-    })
+    return axios.post('/api/groups/' + groupId + '/users/' + user)
+      .then((response) => {
+        return response;
+      })
+  },
+
+  getMembers: (groupId) => {
+    return axios.get('/api/groups/' + groupId + '/members')
+      .then((response) => {
+        console.log(response);
+        return response
+      })
   }
 
 

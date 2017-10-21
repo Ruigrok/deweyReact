@@ -13,41 +13,49 @@ class Library extends Component {
     this.state = {
       open: false,
       title: "",
-      comments:"",
-      results:[],
+      comments: "",
+      results: [],
       user: "",
       email: null,
       photoRef: "",
-      nickname:"",
-      profileOpen:false,
-      favoriteBook:"",
-      currentlyReading:"",
-      myFavorite:"",
-      myCurrent:""
+      nickname: "",
+      profileOpen: false,
+      favoriteBook: "",
+      currentlyReading: "",
+      myFavorite: "",
+      myCurrent: ""
     };
 
     this.getUser = this.getUser.bind(this);
-    this.getLibrary=this.getLibrary.bind(this);
+    this.getLibrary = this.getLibrary.bind(this);
   }
 
   // Use state.email from Auth0 to get MySQL user or create new user. Store user in state.user
   getUser() {
     userHelpers.getUser(this.state.email)
-    .then((result) => {
-      this.setState({
-        user: result.data
-      }, this.getLibrary);
-      // console.log("USER: "+this.state.user.id);
-    })
+      .then((result) => {
+        if (result.data != null) {
+          this.setState({
+            user: result.data
+          }, this.getLibrary);
+        } else {
+          userHelpers.createUser(this.state.email, this.state.nickname, this.state.photoRef)
+            .then((result) => {
+              this.setState({
+                user: result.data
+              }, this.getLibrary);
+            })
+        }
+      })
   }
 
-  getLibrary(){
-    libraryHelpers.showBooks(this.state.user.id).then(function(response){
+  getLibrary() {
+    libraryHelpers.showBooks(this.state.user.id).then(function (response) {
       this.setState({
         results: response.data
       })
     }.bind(this))
-    libraryHelpers.getUserBooks(this.state.email).then(function(response){
+    libraryHelpers.getUserBooks(this.state.email).then(function (response) {
       this.setState({
         myFavorite: response.data.favoriteBook,
         myCurrent: response.data.currentlyReading
@@ -61,14 +69,14 @@ class Library extends Component {
     if (!userProfile) {
       getProfile((err, profile) => {
         // console.log(profile);
-        this.setState({ 
+        this.setState({
           email: profile.email,
           photoRef: profile.picture,
           nickname: profile.nickname
         }, self.getUser);
       });
     } else {
-      this.setState({ 
+      this.setState({
         email: userProfile.email,
         photoRef: userProfile.picture,
         nickname: userProfile.nickname,
@@ -79,10 +87,10 @@ class Library extends Component {
 
 
   handleRequestClose = () => {
-    this.setState({open: false});
-    libraryHelpers.getBookImageTitle(this.state.title).then(function(data){
+    this.setState({ open: false });
+    libraryHelpers.getBookImageTitle(this.state.title).then(function (data) {
       libraryHelpers.saveBook(data.returnedTitle, data.returnedAuthor, this.state.comments, data.returnedLink, this.state.user.id);
-      libraryHelpers.showBooks(this.state.user.id).then(function(response){
+      libraryHelpers.showBooks(this.state.user.id).then(function (response) {
         this.setState({
           results: response.data
         })
@@ -90,9 +98,9 @@ class Library extends Component {
     }.bind(this))
   }
   handleEditRequestClose = () => {
-    this.setState({profileOpen: false});
-    libraryHelpers.updateUserBooks(this.state.user.id, this.state.favoriteBook, this.state.currentlyReading).then(function(response){
-      libraryHelpers.getUserBooks(this.state.email).then(function(response){
+    this.setState({ profileOpen: false });
+    libraryHelpers.updateUserBooks(this.state.user.id, this.state.favoriteBook, this.state.currentlyReading).then(function (response) {
+      libraryHelpers.getUserBooks(this.state.email).then(function (response) {
         this.setState({
           myFavorite: response.data.favoriteBook,
           myCurrent: response.data.currentlyReading
@@ -144,7 +152,7 @@ class Library extends Component {
                   <h3 className="panel-title">{this.state.nickname}</h3>
                 </div>
                 <div className="panel-body">
-                  <img src={this.state.photoRef} id="personalPicture" alt="user"/>
+                  <img src={this.state.photoRef} id="personalPicture" alt="user" />
                   <div id="personalInfo">
                     <p><strong>Favorite Book: </strong>{this.state.myFavorite}</p>
                     <p><strong>Currently Reading: </strong>{this.state.myCurrent}</p>
@@ -190,7 +198,7 @@ class Library extends Component {
               <div className="panel-heading" id="panel">
                 <h3 className="panel-title">Bookshelf</h3>
               </div>
-              <div className="panel-body"> 
+              <div className="panel-body">
                 <MuiThemeProvider>
                   <div>
                     <Dialog
@@ -227,7 +235,7 @@ class Library extends Component {
                   </div>
                 </MuiThemeProvider>
                 <div>
-                  <LibraryResults results={this.state.results}/>
+                  <LibraryResults results={this.state.results} />
                 </div>
               </div>
             </div>
