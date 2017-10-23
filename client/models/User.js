@@ -10,6 +10,12 @@ module.exports = function (sequelize, DataTypes) {
         favoriteBook: {
             type: DataTypes.TEXT,
             allowNull:true
+        },
+        photoRef: {
+            type: DataTypes.STRING            
+        },
+        nickname: {
+            type: DataTypes.STRING
         }
     });
 

@@ -7,7 +7,6 @@ import {
   StepButton,
 } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
 
 import groupHelpers from '../utils/groupHelpers';
@@ -15,7 +14,7 @@ import groupHelpers from '../utils/groupHelpers';
 import GroupCards from './GroupCards.js';
 import CreateGroup from './CreateGroup.js';
 import JoinGroup from './JoinGroup.js';
-//import ShowMembers from './ShowMembers.js';
+import ShowMembers from './ShowMembers.js';
 import Discussion from './Discussion';
 
 
@@ -111,13 +110,13 @@ class Community extends React.Component {
     })
   }
 
-// Select a group for ShowMembers component
-/* showMembers = (group) => {
-  this.setState({
-    selectedGroup: group,
-    stepIndex: 2
-  })
-} */
+  // Select a group for ShowMembers component
+  showMembers = (group) => {
+    this.setState({
+      selectedGroup: group,
+      stepIndex: 2
+    })
+  }
 
   // Functions for step feature
   handleNext = () => {
@@ -155,7 +154,7 @@ class Community extends React.Component {
             <GroupCards
               groups={this.state.groups}
               showDiscussions={this.showDiscussions}
-              /*showMembers={this.showMembers}*/
+              showMembers={this.showMembers}
               leaveGroup={this.leaveGroup}
               deleteGroup={this.deleteGroup}
             />
@@ -190,8 +189,7 @@ class Community extends React.Component {
         );
       case 2:
         return (
-          ""
-          /* <ShowMembers group={this.state.selectedGroup} /> */
+          <ShowMembers group={this.state.selectedGroup} /> 
         );
       default:
         return 'You\'re a long way from home sonny jim!';

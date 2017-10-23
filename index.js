@@ -22,25 +22,23 @@ app.use(morgan('dev'));
 //app.use(express.static('client/public'));
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-// Get a user based on their email. Create user if email not found.
+// Get a user based on their email
 app.get('/api/users/:email', function (req, res) {
   db.User.findOne({
     where: { email: req.params.email },
     include: [db.Library]
   }).then(function (user) {
-    console.log(user);
-    if (!user) {
-      var newUser = {
-        email: req.params.email,
-      };
-      db.User.create(newUser).then(function (result) {
-        res.json(result)
-      });
-    } else {
-      res.json(user);
-    }
+    res.json(user);
   });
 });
+
+// Create a new user
+app.post('/api/users', function (req, res) {
+  db.User.create(req.body)
+    .then(function (results) {
+      res.json(results)
+    });
+})
 
 app.post('/api/library', function (req, res) {
   db.Library.create({
@@ -54,41 +52,42 @@ app.post('/api/library', function (req, res) {
   });
 });
 
-app.get('/api/library/:id', function (req,res){
+app.get('/api/library/:id', function (req, res) {
   db.Library.findAll({
-    where:{
+    where: {
       UserId: req.params.id
     }
   })
-  .then(function(results){
-    console.log
-    res.json(results);
-  });
+    .then(function (results) {
+      console.log
+      res.json(results);
+    });
 });
 
-app.delete('/api/library/:id',function(req,res){
+app.delete('/api/library/:id', function (req, res) {
   db.Library.destroy({
     where: {
       id: req.params.id
     }
-  }).then(function(results){
+  }).then(function (results) {
     res.json(results);
   });
 });
 
 
-app.put('/api/users/:id', function (req,res){;
+app.put('/api/users/:id', function (req, res) {
+  ;
   db.User.update(
-  {
-    favoriteBook: req.body.favoriteBook,
-    currentlyReading: req.body.currentlyReading
-  },
-  {
-    where: { id: req.params.id }
-  })
-  .then(function(results){
-    res.json(results);
-  });
+    {
+      favoriteBook: req.body.favoriteBook,
+      currentlyReading: req.body.currentlyReading
+    },
+    {
+      where: { id: req.params.id }
+    })
+    .then(function (results) {
+      res.json(results);
+    });
 });
 
 // Get user user's groups and discussions
@@ -108,15 +107,15 @@ app.get('/api/groups/:email', function (req, res) {
 
 // Get all groups to display in JoinGroup component
 app.get('/api/allgroups', function (req, res) {
-  db.Group.findAll({ 
+  db.Group.findAll({
     include: [{
       model: db.User,
       through: {
         attributes: ['name', 'description']
-      } 
+      }
     }]
   })
-    .then(function(results) {
+    .then(function (results) {
       res.json(results);
     })
 })
@@ -143,9 +142,9 @@ app.post('/api/groups', function (req, res) {
 app.delete('/api/groups/:group/:user', function (req, res) {
   db.User.findOne({
     where: { email: req.params.user }
-  }).then(function(user) {
-    user.removeGroup(req.params.group)  
-  }).then(function(results) {
+  }).then(function (user) {
+    user.removeGroup(req.params.group)
+  }).then(function (results) {
     res.json(results);
   })
 })
@@ -154,7 +153,7 @@ app.delete('/api/groups/:group/:user', function (req, res) {
 app.delete('/api/groups/:group', function (req, res) {
   db.Group.destroy({
     where: { id: req.params.group }
-  }).then(function(results) {
+  }).then(function (results) {
     res.json(results);
   })
 })
@@ -166,8 +165,19 @@ app.post('/api/groups/:group/users/:user', function (req, res) {
   })
     .then(function (user) {
       user.addGroup(req.params.group)
-    }). then(function(results) {
+    }).then(function (results) {
       res.json(results);
+    })
+})
+
+// Get all members of a group
+app.get('/api/groups/:group/members', function (req, res) {
+  db.Group.findById(req.params.group)
+    .then(function (group) {
+      group.getUsers()
+        .then(function (users) {
+          res.json(users)
+        })
     })
 })
 
@@ -182,46 +192,45 @@ app.post('/api/groups/:group/discussions', function (req, res) {
 });
 
 // Get a specific Group's discussions
-app.get('/api/groups/:group/discussions', function(req, res){
+app.get('/api/groups/:group/discussions', function (req, res) {
   db.Group.findById(req.params.group)
-    .then(function(group){
+    .then(function (group) {
       group.getDiscussions()
-        .then(function(discussions){
+        .then(function (discussions) {
           res.json(discussions)
         })
     });
 });
 
 // Delete discussion in database whenever a group member deletes it
-app.delete('/api/groups/:group/discussions/:discussion', function(req, res){
+app.delete('/api/groups/:group/discussions/:discussion', function (req, res) {
   db.Discussion.destroy({
     where: {
       id: req.params.discussion
     }
-  }).then(function(results){
+  }).then(function (results) {
     res.json(results);
   });
 });
 
 // Update discussion name
-app.put('/api/groups/:group/discussions/:discussion', function(req, res){
+app.put('/api/groups/:group/discussions/:discussion', function (req, res) {
   db.Discussion.update(
-  {
-    name: req.body.name
-  },
-  {
-    where: {
-      id: req.params.discussion
-    }
-  }).then(function(results){
-    res.json(results)
-  });
+    {
+      name: req.body.name
+    },
+    {
+      where: {
+        id: req.params.discussion
+      }
+    }).then(function (results) {
+      res.json(results)
+    });
 });
 
 /* app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/client/public/index.html'));
 }); */
-
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
