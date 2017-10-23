@@ -23,16 +23,25 @@ class Discover extends Component {
 
   // Use state.email from Auth0 to get MySQL user or create new user. Store user in state.user
   handleTouchTap = () => {
-    discoverHelpers.findBooks(this.state.search).then((response)=>{
-      console.log(response);
-      this.setState({
-        results:response
+    if(this.state.selectedOption==="genre"){
+      discoverHelpers.findBookSubject(this.state.search).then((response)=>{
+        // console.log(response);
+        this.setState({
+          results:response
+        })
+      console.log("SELECTED: "+this.state.selectedOption); 
       })
-      // console.log("RESULTS: "+this.state.results);
-      console.log("SELECTED: "+this.selectedOption); 
-    })
+    }
+    else {
+      discoverHelpers.findBookAuthor(this.state.search).then((response)=>{
+        // console.log(response);
+        this.setState({
+          results:response
+        })
+      console.log("SELECTED: "+this.state.selectedOption); 
+      })
+    }
   }
-
   handleChange = (event) => {
     var newState = {};
     newState[event.target.id] = event.target.value;
@@ -41,8 +50,7 @@ class Discover extends Component {
   handleOptionChange=(event)=>{
     this.setState({
       selectedOption:event.target.value
-    })
-   console.log("SELECTED: "+this.selectedOption); 
+    }, console.log("SELECTED: "+this.state.selectedOption))     
   }
 
   // Here we render the function
@@ -92,7 +100,7 @@ class Discover extends Component {
                         onTouchTap={this.handleTouchTap}
                       />
                     </MuiThemeProvider>
-                    <div>{this.state.results}</div>
+                    <DiscoverResults results={this.state.results} />
                   </div>
                 </div>
               </div>
