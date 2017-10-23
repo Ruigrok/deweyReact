@@ -23,7 +23,7 @@ class Home extends Component {
             isAuthenticated() && (
                 <h4>
                   You are logged in! You can now view your{' '}
-                  <Link to="library">Library</Link>
+                  <Link to="library" className="libraryLink">Library</Link>
                   .
                 </h4>
               )
