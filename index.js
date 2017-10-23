@@ -19,7 +19,7 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(morgan('dev'));
 
 // Static directory
-app.use(express.static('client/public'));
+//app.use(express.static('client/public'));
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 // Routes
@@ -29,9 +29,9 @@ require('./api-routes/library-routes.js')(app);
 require('./api-routes/community-routes.js')(app);
 require('./api-routes/discussion-routes.js')(app);
 
-app.get('*', (req, res) => {
+/* app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/client/public/index.html'));
-});
+}); */
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
