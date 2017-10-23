@@ -27,16 +27,7 @@ class ShowMembers extends Component {
   render() {
 
     let display;
-     if (this.state.groupMembers.data === undefined) {
-      display = (
-        <div className="col s4 offset-s4">
-          <Card style={{ marginTop: '30px', paddingRight: '20px' }}>
-            <CardHeader title="There's no one here!" />
-          </Card>
-        </div>
-      );
-    } else {
-      
+     if (this.state.groupMembers.data != undefined) {
       display = (
         <div className="row">
           {this.state.groupMembers.data.map((user, i) => {
