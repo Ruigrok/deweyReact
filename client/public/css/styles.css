@@ -9,6 +9,8 @@
   font-family: 'Inconsolata', monospace;
   margin: 0;
   font-weight:bold;
+  padding-top: 50px;
+  font-size: 1.1em;
 }
 .landing h1 {
   padding-left:0px;
@@ -23,6 +25,11 @@
   font-weight: bold;
 }
 
+.libraryLink {
+  color: white;
+  font-weight: bold;
+  font-style: italic;
+}
 /*Styles for every page*/
 
 /*Library*/
@@ -96,4 +103,7 @@
 /*Discover*/
 .discover{
   min-height:420px;
+}
+.buttons {
+    display: inline-flex;
 }
