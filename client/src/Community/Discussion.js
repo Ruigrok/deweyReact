@@ -165,7 +165,7 @@ class Discussion extends Component {
 		let display;
 		if (!this.state.discList.data){
 			display = (
-			  <Tabs className="col s5">
+			  <Tabs className="col s8 offset-s2">
 			    <Tab label="+ Create Chat" >
 			    	<CreateDiscussion groupId={this.props.group.id} getDiscussions={this.getDiscussions} />
 			    </Tab>
