@@ -20,5 +20,20 @@ module.exports = function (app) {
       });
   });
 
+  app.put('/api/users/:id', function (req, res) {
+    db.User.update(
+      {
+        favoriteBook: req.body.favoriteBook,
+        currentlyReading: req.body.currentlyReading,
+        photoRef: req.body.photoRef
+      },
+      {
+        where: { id: req.params.id }
+      })
+      .then(function (results) {
+        res.json(results);
+      });
+  });
+
 }
 

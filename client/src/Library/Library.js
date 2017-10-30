@@ -4,8 +4,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 import LibraryResults from './LibraryResults';
 import libraryHelpers from '../utils/libraryHelpers';
+import Dropzone from 'react-dropzone';
 
 class Library extends Component {
   constructor(props) {
@@ -22,25 +24,25 @@ class Library extends Component {
       profileOpen: false,
       favoriteBook: "",
       currentlyReading: "",
-      myFavorite: "",
-      myCurrent: ""
+      newPhoto: "",
+      newFavBook: "",
+      newCurrRead: ""
     };
-
-    this.getUser = this.getUser.bind(this);
-    this.getLibrary = this.getLibrary.bind(this);
   }
 
-  // Use state.email from Auth0 to get MySQL user or create new user. Store user in state.user
   getUser() {
     userHelpers.getUser(this.state.email)
-      .then((result) => {
+      .then(result => {
         if (result.data != null) {
           this.setState({
-            user: result.data
+            user: result.data,
+            favoriteBook: result.data.favoriteBook,
+            currentlyReading: result.data.currentlyReading,
+            photoRef: result.data.photoRef
           }, this.getLibrary);
         } else {
           userHelpers.createUser(this.state.email, this.state.nickname, this.state.photoRef)
-            .then((result) => {
+            .then(result => {
               this.setState({
                 user: result.data
               }, this.getLibrary);
@@ -49,26 +51,18 @@ class Library extends Component {
       })
   }
 
-  getLibrary() {
+  getLibrary = () => {
     libraryHelpers.showBooks(this.state.user.id).then(function (response) {
-      this.setState({
-        results: response.data
-      })
-    }.bind(this))
-    libraryHelpers.getUserBooks(this.state.email).then(function (response) {
-      this.setState({
-        myFavorite: response.data.favoriteBook,
-        myCurrent: response.data.currentlyReading
-      })
+      this.setState({ results: response.data })
     }.bind(this))
   }
+
   // Get the user profile from Auth0. Store the email in state.email
   componentDidMount() {
     let self = this;
     const { userProfile, getProfile } = this.props.auth;
     if (!userProfile) {
       getProfile((err, profile) => {
-        // console.log(profile);
         this.setState({
           email: profile.email,
           photoRef: profile.picture,
@@ -82,9 +76,7 @@ class Library extends Component {
         nickname: userProfile.nickname,
       }, self.getUser);
     }
-
   }
-
 
   handleRequestClose = () => {
     this.setState({ open: false });
@@ -97,25 +89,30 @@ class Library extends Component {
       }.bind(this))
     }.bind(this))
   }
+
   handleEditRequestClose = () => {
     this.setState({ profileOpen: false });
-    libraryHelpers.updateUserBooks(this.state.user.id, this.state.favoriteBook, this.state.currentlyReading).then(function (response) {
-      libraryHelpers.getUserBooks(this.state.email).then(function (response) {
-        this.setState({
-          myFavorite: response.data.favoriteBook,
-          myCurrent: response.data.currentlyReading
-        })
-      }.bind(this))
-    }.bind(this))
+  }
+
+  editProfile = () => {
+    let self = this;
+    userHelpers.updateUser(this.state.user.id, this.state.newFavBook, this.state.newCurrRead, this.state.newPhoto)
+      .then(() => {
+        self.getUser();
+        self.handleEditRequestClose();
+      })
   }
 
   handleTouchTap = () => {
     this.setState({ open: true });
-
   }
+
   handleEditTouchTap = () => {
     this.setState({
-      profileOpen: true
+      profileOpen: true,
+      newPhoto: '',
+      newFavBook: '',
+      newCurrRead: ''
     });
   }
 
@@ -123,6 +120,14 @@ class Library extends Component {
     var newState = {};
     newState[event.target.id] = event.target.value;
     this.setState(newState);
+  }
+
+  handleDrop = files => {
+    const image = files[0];
+    userHelpers.cloudinaryPhoto(image)
+      .then(response => {
+        this.setState({ newPhoto: response.data.secure_url })
+      })
   }
 
   // Here we render the function
@@ -138,7 +143,7 @@ class Library extends Component {
       <FlatButton
         label="Update"
         primary={true}
-        onTouchTap={this.handleEditRequestClose}
+        onTouchTap={this.editProfile}
       />
     );
 
@@ -152,10 +157,10 @@ class Library extends Component {
                   <h3 className="panel-title">{this.state.nickname}</h3>
                 </div>
                 <div className="panel-body">
-                  <img src={this.state.photoRef} id="personalPicture" alt="user" />
+                  <img src={this.state.user.photoRef} id="personalPicture" alt="user" />
                   <div id="personalInfo">
-                    <p><strong>Favorite Book: </strong>{this.state.myFavorite}</p>
-                    <p><strong>Currently Reading: </strong>{this.state.myCurrent}</p>
+                    <p><strong>Favorite Book: </strong>{this.state.favoriteBook}</p>
+                    <p><strong>Currently Reading: </strong>{this.state.currentlyReading}</p>
                   </div>
                   <MuiThemeProvider>
                     <div>
@@ -166,21 +171,35 @@ class Library extends Component {
                         onRequestClose={this.handleEditRequestClose}
                         autoScrollBodyContent={true}
                       >
+                        <div className='col-sm-12'>
+                          <div className='row'>
+                            <div className='col-sm-5'>
+                              <Dropzone
+                                onDrop={this.handleDrop}
+                                accept="image/*"
+                              />
+                            </div>
+                            <div className='col-sm-5'>
+                              <img src={this.state.newPhoto} alt='Upload Photo' />
+                            </div>
+                          </div>
+                        </div>
+
                         <input
-                          value={this.state.favoriteBook}
+                          value={this.state.newFavBook}
                           type="text"
                           className="form-control text-left"
                           placeholder="My Favorite Book"
-                          id="favoriteBook"
+                          id="newFavBook"
                           onChange={this.handleChange}
                           required
                         />
                         <input
-                          value={this.state.currentlyReading}
+                          value={this.state.newCurrRead}
                           type="text"
                           className="form-control text-left"
                           placeholder="Currently Reading..."
-                          id="currentlyReading"
+                          id="newCurrRead"
                           onChange={this.handleChange}
                           required
                         />
