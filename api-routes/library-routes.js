@@ -36,20 +36,4 @@ module.exports = function (app) {
     });
   });
 
-
-  app.put('/api/users/:id', function (req, res) {
-    ;
-    db.User.update(
-      {
-        favoriteBook: req.body.favoriteBook,
-        currentlyReading: req.body.currentlyReading
-      },
-      {
-        where: { id: req.params.id }
-      })
-      .then(function (results) {
-        res.json(results);
-      });
-  });
-
 }
