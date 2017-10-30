@@ -4,7 +4,7 @@ const discussionHelpers = {
 	// Get a specific Group's discussions
 	getDiscussionsOfGroup: (groupId) => {
 	  return axios.get("/api/groups/"+groupId+"/discussions")
-	    .then(function(results){
+	    .then(results => {
 	        return results;
 	    })
 	},
@@ -12,7 +12,7 @@ const discussionHelpers = {
 	// Create a discussion in database
 	createDiscussion: (groupId, discName) => {
 	  return axios.post("/api/groups/"+groupId+"/discussions", {name: discName})
-	    .then(function(results){
+	    .then(results => {
 	        return results;
 	    })
 	},
@@ -20,7 +20,7 @@ const discussionHelpers = {
 	// Update discussion name
 	updateDiscussionName: (groupId, discussionId, chatName) => {
 	  return axios.put("/api/groups/"+groupId+"/discussions/"+discussionId, {name: chatName})
-	    .then(function(results){
+	    .then(results => {
 	        return results;
 	    })
 	},
