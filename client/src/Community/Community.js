@@ -1,16 +1,11 @@
 import React from 'react';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {
-  Step,
-  Stepper,
-  StepButton,
-} from 'material-ui/Stepper';
+import { Step, Stepper, StepButton } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FontIcon from 'material-ui/FontIcon';
 
 import groupHelpers from '../utils/groupHelpers';
-
 import GroupCards from './GroupCards.js';
 import CreateGroup from './CreateGroup.js';
 import JoinGroup from './JoinGroup.js';
@@ -31,7 +26,7 @@ class Community extends React.Component {
 
   getGroups = () => {
     groupHelpers.getGroups(this.state.email)
-      .then((data) => {
+      .then(data => {
         this.setState({ groups: data })
       })
   }
@@ -82,7 +77,7 @@ class Community extends React.Component {
   // Get all groups to display in JoinGroup component
   getAllGroups = () => {
     groupHelpers.getAllGroups()
-      .then((data) => {
+      .then(data => {
         this.setState({
           allGroups: data,
           stepIndex: 0.5

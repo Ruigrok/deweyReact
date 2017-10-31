@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import groupHelpers from '../utils/groupHelpers';
-import { Card, CardHeader } from 'material-ui/Card';
 
 class ShowMembers extends Component {
   constructor(props) {
@@ -13,10 +12,8 @@ class ShowMembers extends Component {
 
   getMembers = () => {
     groupHelpers.getMembers(this.props.group.id)
-      .then((data) => {
-        this.setState({
-          groupMembers: data
-        })
+      .then(data => {
+        this.setState({ groupMembers: data })
       })
   }
 
@@ -27,7 +24,7 @@ class ShowMembers extends Component {
   render() {
 
     let display;
-     if (this.state.groupMembers.data != undefined) {
+     if (this.state.groupMembers.data !== undefined) {
       display = (
         <div className="row">
           {this.state.groupMembers.data.map((user, i) => {
@@ -41,8 +38,8 @@ class ShowMembers extends Component {
                       <div className="panel-body">
                         <img src={user.photoRef} id="personalPicture" alt="user" />
                         <div id="personalInfo">
-                          <p><strong>Favorite Book: </strong>{user.myFavorite}</p>
-                          <p><strong>Currently Reading: </strong>{user.myCurrent}</p>
+                          <p><strong>Favorite Book: </strong>{user.favoriteBook}</p>
+                          <p><strong>Currently Reading: </strong>{user.currentlyReading}</p>
                         </div>
 
                       </div>
