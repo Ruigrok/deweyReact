@@ -91,6 +91,13 @@
   background:rgb(255, 64, 129);
 }
 
+.slick-slide img {
+  display: inline-block;
+}
+.slick-next:before, .slick-prev:before {
+  color: #ccc;
+}
+
 /* Discussions */
 #userMessage, #discName {
   text-align: center;

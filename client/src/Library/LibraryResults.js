@@ -3,8 +3,18 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import libraryHelpers from '../utils/libraryHelpers';
+import Slider from 'react-slick'
+
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 4,
+  slidesToScroll: 1
+};
 
 class LibraryResults extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -90,6 +100,32 @@ class LibraryResults extends Component {
           )
         }.bind(this)
         )}
+
+        <MuiThemeProvider>
+          <Slider {...settings}>
+            {this.props.results.map(function(search,i){
+              return (
+                <div key={i}>
+                  <Dialog
+                    open={this.state.open}
+                    actions={standardActions}
+                    onRequestClose={this.handleRequestClose}
+                    autoScrollBodyContent={true}
+                  >
+                    <h3>{this.state.modalTitle}</h3>
+                    <h4>{this.state.modalAuthor}</h4>
+                    <h4>Rating: {this.state.modalRating}/5</h4>
+                    <p>Summary: {this.state.modalDescription}</p>
+
+                  </Dialog>
+                  <div onTouchTap={this.handleTouchTap}>
+                    <img className="bookImage" title={search.title} id={search.id} src={search.link} alt={search.title}/>
+                  </div>
+                </div>
+              )}.bind(this)
+            )}
+          </Slider>
+        </MuiThemeProvider>
 			</div>
 		);
 	}
